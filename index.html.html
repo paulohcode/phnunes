@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paulo Henrique – Professor de TI</title>
+  <meta name="description" content="Site institucional pessoal de Paulo Henrique, professor de TI" />
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --panel: #0f1520;
+      --text: #e6f1ff;
+      --muted: #8aa4c5;
+      --primary: #00e5ff;   /* ciano neon */
+      --accent: #9b5cff;    /* lilás neon */
+      --success: #2ee59d;
+      --danger: #ff4d6d;
+      --glow: 0 0 18px rgba(0,229,255,.35), 0 0 42px rgba(155,92,255,.25);
+      --radius: 16px;
+      --shadow: 0 6px 30px rgba(0,0,0,.35);
+      --maxw: 1150px;
+    }
+
+    html,body{height:100%;}
+    body{
+      margin:0; background: radial-gradient(1200px 600px at 85% -10%, rgba(0,229,255,.08), transparent 60%),
+                             radial-gradient(1000px 500px at -10% 120%, rgba(155,92,255,.08), transparent 60%),
+                             var(--bg);
+      color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      line-height:1.55;
+    }
+
+    /* Layout helpers */
+    .container{max-width:var(--maxw); margin-inline:auto; padding: 0 20px;}
+    section{padding: 80px 0;}
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:40; backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(11,15,20,.85), rgba(11,15,20,.55));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; height:64px;}
+    .brand{display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.4px;}
+    .logo{width:36px; height:36px; border-radius:10px; background: linear-gradient(135deg, var(--primary), var(--accent)); box-shadow: var(--glow);}    
+    nav ul{list-style:none; display:flex; gap:22px; margin:0; padding:0;}
+    nav a{color:var(--muted); text-decoration:none; font-weight:500;}
+    nav a:hover{color:var(--text);}    
+
+    .menu-btn{display:none; background:none; border:1px solid rgba(255,255,255,.12); color:var(--text); padding:8px 12px; border-radius:10px}
+
+    /* Hero */
+    .hero{display:grid; grid-template-columns: 1.15fr .85fr; gap:36px; align-items:center;}
+    .kicker{color:var(--primary); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; letter-spacing:.3px;}
+    h1{font-size: clamp(28px, 5vw, 46px); margin:8px 0 14px; line-height:1.1;}
+    .lead{font-size: clamp(16px, 2.2vw, 18px); color:var(--muted); max-width:60ch}
+
+    .cta-row{display:flex; gap:14px; margin-top:24px; flex-wrap:wrap}
+    .btn{appearance:none; border:none; padding:12px 16px; border-radius:12px; cursor:pointer; font-weight:600; letter-spacing:.2px;}
+    .btn-primary{background: linear-gradient(135deg, var(--primary), var(--accent)); color:#001018; box-shadow: var(--glow);} 
+    .btn-ghost{background: transparent; color: var(--text); border:1px solid rgba(255,255,255,.15)}
+    .btn:hover{transform: translateY(-1px);}    
+
+    .card-portrait{background: linear-gradient(180deg, rgba(0,229,255,.07), rgba(155,92,255,.07)); border:1px solid rgba(255,255,255,.08); border-radius: var(--radius); box-shadow: var(--shadow); padding:22px; display:flex; align-items:center; justify-content:center; min-height:280px; position:relative; overflow:hidden}
+    .ring{position:absolute; inset:-40%; border-radius:50%; background: radial-gradient(closest-side, rgba(0,229,255,.18), transparent 55%); filter: blur(18px);}
+    .avatar{position:relative; width:168px; height:168px; border-radius: 28px; background: url('') center/cover no-repeat, linear-gradient(135deg, #0b0f14, #111926);
+            border:1px solid rgba(255,255,255,.08); box-shadow: var(--glow);}
+    .avatar::after{content:"PH"; position:absolute; inset:0; display:grid; place-items:center; font-weight:800; font-size:42px; color:var(--text); mix-blend:overlay;}
+
+    /* Sections */
+    .section-title{font-size: clamp(22px, 3.5vw, 32px); margin:0 0 10px}
+    .section-kicker{color:var(--primary); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .muted{color:var(--muted)}
+
+    /* About / timeline */
+    .grid-2{display:grid; gap:26px; grid-template-columns: 1fr 1fr;}
+    .about{
+      background: var(--panel); border:1px solid rgba(255,255,255,.06); border-radius: var(--radius); padding:22px; box-shadow: var(--shadow);
+    }
+    .timeline{border-left:2px dashed rgba(255,255,255,.15); padding-left:18px; display:flex; flex-direction:column; gap:16px}
+    .tl-item{position:relative}
+    .tl-item::before{content:""; position:absolute; left:-28px; top:6px; width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg, var(--primary), var(--accent)); box-shadow: var(--glow);} 
+    .tl-item time{display:block; font-weight:700; color:var(--text)}
+
+    /* Cards */
+    .cards{display:grid; grid-template-columns: repeat(12, 1fr); gap:16px;}
+    .card{grid-column: span 4; background: var(--panel); border:1px solid rgba(255,255,255,.06); border-radius: var(--radius); padding:18px; box-shadow: var(--shadow);}
+    .card h3{margin:6px 0 8px; font-size:18px}
+
+    /* Terminal list */
+    .terminal{background:#0a0f14; border:1px solid rgba(255,255,255,.08); border-radius: 14px; overflow:hidden;}
+    .term-bar{display:flex; gap:6px; padding:8px 10px; align-items:center; background:#0b1220; border-bottom:1px solid rgba(255,255,255,.08)}
+    .dot{width:10px; height:10px; border-radius:50%}
+    .dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
+    .term-body{padding:14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; color:#c5e4ff}
+    .cursor{display:inline-block; width:.65ch; background:var(--primary); animation: blink 1s steps(1,end) infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    /* Projects grid */
+    .projects{display:grid; grid-template-columns: repeat(3, 1fr); gap:16px}
+    .project{background: linear-gradient(180deg, rgba(0,229,255,.06), rgba(155,92,255,.06)); border:1px solid rgba(255,255,255,.08); border-radius: var(--radius); padding:16px}
+    .project a{color:var(--primary); text-decoration:none}
+
+    /* Blog list */
+    .feed{display:flex; flex-direction:column; gap:14px}
+    .feed a{display:block; padding:14px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background: var(--panel); text-decoration:none; color:var(--text)}
+    .feed a:hover{border-color: rgba(0,229,255,.35)}
+
+    /* Contact */
+    form{display:grid; gap:12px; max-width:640px}
+    input, textarea{background:#0b1220; border:1px solid rgba(255,255,255,.12); color:var(--text); padding:12px 14px; border-radius:12px}
+    textarea{min-height:120px}
+
+    /* Footer */
+    footer{padding:40px 0; color:var(--muted); border-top:1px solid rgba(255,255,255,.06)}
+
+    /* Responsive */
+    @media (max-width: 960px){
+      .hero{grid-template-columns: 1fr;}
+      .grid-2{grid-template-columns: 1fr}
+      .cards .card{grid-column: span 6}
+      .projects{grid-template-columns: 1fr 1fr}
+    }
+    @media (max-width: 700px){
+      nav ul{display:none}
+      .menu-btn{display:block}
+      .cards .card{grid-column: span 12}
+      .projects{grid-template-columns: 1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Paulo Henrique</span>
+      </div>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">Menu</button>
+      <nav id="menu" aria-label="Principal">
+        <ul>
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#carreira">Carreira</a></li>
+          <li><a href="#projetos">Projetos</a></li>
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero / Início -->
+  <section id="inicio" class="container">
+    <div class="hero">
+      <div>
+        <div class="kicker">&gt; professor_ti</div>
+        <h1>Sou Paulo Henrique<span class="cursor" aria-hidden="true"></span></h1>
+        <p class="lead">Professor de TI, focado em ensino de programação, redes e fundamentos de segurança. Compartilho conhecimento por meio de aulas, materiais e projetos práticos.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#sobre">Saiba mais</a>
+          <a class="btn btn-ghost" href="#projetos">Ver projetos</a>
+        </div>
+      </div>
+      <div class="card-portrait">
+        <div class="ring" aria-hidden="true"></div>
+        <div class="avatar" role="img" aria-label="Retrato/Avatar do Paulo Henrique"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre -->
+  <section id="sobre">
+    <div class="container grid-2">
+      <article class="about">
+        <div class="section-kicker">&gt; sobre_mim</div>
+        <h2 class="section-title">Sobre mim</h2>
+        <p>Sou educador na área de Tecnologia da Informação, com atuação em programação, redes e segurança. Acredito em aprendizagem prática, projetos reais e no desenvolvimento de competências que conectam teoria com o mercado.</p>
+        <p>Minha missão é tornar o aprendizado de TI acessível, estruturado e motivador — do primeiro “Hello, World!” aos primeiros deploys e certificações.</p>
+      </article>
+      <aside class="about">
+        <div class="section-kicker">&gt; linha_do_tempo</div>
+        <h2 class="section-title">Trajetória</h2>
+        <div class="timeline">
+          <div class="tl-item"><time>2015</time><div>Graduação em [Sua área]</div></div>
+          <div class="tl-item"><time>2018</time><div>Especialização em [Tema]</div></div>
+          <div class="tl-item"><time>2022</time><div>Início da docência em TI</div></div>
+          <div class="tl-item"><time>2025</time><div>Projetos educacionais e materiais didáticos</div></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Carreira Acadêmica / Competências -->
+  <section id="carreira">
+    <div class="container">
+      <div class="section-kicker">&gt; carreira_academica</div>
+      <h2 class="section-title">Formação & Pesquisas</h2>
+      <p class="muted">Resumo de formação, certificações, publicações e interesses de pesquisa.</p>
+      <div class="cards" style="margin-top:16px">
+        <div class="card">
+          <h3>Formação</h3>
+          <ul>
+            <li>Graduação em [Curso]</li>
+            <li>Pós/Especialização em [Tema]</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Certificações</h3>
+          <ul>
+            <li>[Certificação A]</li>
+            <li>[Certificação B]</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Publicações</h3>
+          <ul>
+            <li><a href="#" aria-label="Link para publicação 1">Artigo / Capítulo</a></li>
+            <li><a href="#" aria-label="Link para publicação 2">Trabalho em congresso</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-kicker" style="margin-top:36px">&gt; o_que_faco</div>
+      <h2 class="section-title">Áreas de atuação</h2>
+      <div class="terminal" aria-label="Lista em estilo terminal">
+        <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="term-body">
+          $ ensino_programacao --logica --linguagens &amp;&amp; <span class="cursor" aria-hidden="true"></span><br/>
+          $ fundamentos_redes --modelo-osi --ipv4 --ipv6<br/>
+          $ seguranca_basica --boas-praticas --higiene_digital
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projetos / Portfólio -->
+  <section id="projetos">
+    <div class="container">
+      <div class="section-kicker">&gt; projetos</div>
+      <h2 class="section-title">Projetos & Materiais</h2>
+      <div class="projects" style="margin-top:12px">
+        <div class="project">
+          <h3>Guia de Lógica para Iniciantes</h3>
+          <p class="muted">Apostila PDF com exercícios práticos e desafios.</p>
+          <p><a href="#">Baixar PDF</a></p>
+        </div>
+        <div class="project">
+          <h3>Repositório de Exemplos</h3>
+          <p class="muted">Coleção de códigos comentados para sala de aula.</p>
+          <p><a href="#">Ver no GitHub</a></p>
+        </div>
+        <div class="project">
+          <h3>Mini-curso: Redes 101</h3>
+          <p class="muted">Slides e roteiros de laboratório para iniciantes.</p>
+          <p><a href="#">Acessar materiais</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog">
+    <div class="container">
+      <div class="section-kicker">&gt; blog</div>
+      <h2 class="section-title">Artigos</h2>
+      <div class="feed" style="margin-top:12px">
+        <a href="#"><strong>Como aprender lógica de programação</strong><br><span class="muted">Roteiro de estudos para começar com o pé direito.</span></a>
+        <a href="#"><strong>Dicas para redes de computadores</strong><br><span class="muted">Conceitos essenciais + exercícios.</span></a>
+        <a href="#"><strong>Boas práticas de segurança</strong><br><span class="muted">Higiene digital para alunos e iniciantes.</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contato -->
+  <section id="contato">
+    <div class="container">
+      <div class="section-kicker">&gt; contato</div>
+      <h2 class="section-title">Fale comigo</h2>
+      <p class="muted">Use o formulário ou encontre-me nas redes.</p>
+      <form onsubmit="event.preventDefault(); alert('Mensagem enviada! (demo)');">
+        <input type="text" name="nome" placeholder="Seu nome" required>
+        <input type="email" name="email" placeholder="Seu e-mail" required>
+        <textarea name="mensagem" placeholder="Sua mensagem" required></textarea>
+        <div class="cta-row">
+          <button class="btn btn-primary" type="submit">Enviar mensagem</button>
+          <a class="btn btn-ghost" href="mailto:email@exemplo.com">Enviar por e-mail</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap">
+      <div>© <span id="year"></span> Paulo Henrique • Professor de TI</div>
+      <div style="display:flex; gap:12px">
+        <a href="#" aria-label="LinkedIn" style="color:var(--muted); text-decoration:none">LinkedIn</a>
+        <a href="#" aria-label="GitHub" style="color:var(--muted); text-decoration:none">GitHub</a>
+        <a href="#" aria-label="Lattes" style="color:var(--muted); text-decoration:none">Lattes</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle (básico)
+    const btn = document.getElementById('menuBtn');
+    const menu = document.getElementById('menu').querySelector('ul');
+    btn?.addEventListener('click', () => {
+      const open = getComputedStyle(menu).display !== 'none';
+      menu.style.display = open ? 'none' : 'flex';
+      btn.setAttribute('aria-expanded', String(!open));
+    });
+
+    // Smooth scroll para âncoras
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        const el = document.querySelector(id);
+        if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth'}); }
+      });
+    });
+
+    // Ano dinâmico no footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
