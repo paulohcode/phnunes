@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReciTech - Sustentabilidade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --primary-light: #a2f2c5;
+            --secondary: #3498db;
+            --accent: #ff7f50;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --light: #ecf0f1;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.85);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --card-radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0 15px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+        }
+
+        .logo i {
+            margin-right: 8px;
+            font-size: 1.6rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .notification-badge {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            background-color: var(--white);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            padding: 8px 0;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            color: var(--gray);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* App Content */
+        .app-content {
+            padding: 20px 0;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(25deg);
+        }
+
+        .welcome-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 1.8rem;
+            z-index: 1;
+        }
+
+        .welcome-text h2 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .welcome-text p {
+            z-index: 1;
+            position: relative;
+            opacity: 0.9;
+        }
+
+        /* Side Menu */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: var(--white);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .side-menu.active {
+            left: 0;
+        }
+
+        .menu-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .menu-user-info h3 {
+            margin-bottom: 5px;
+        }
+
+        .menu-user-info p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .menu-items {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: var(--light);
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        .menu-title {
+            padding: 15px 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--light);
+        }
+
+        /* Content Styles */
+        .content-card {
+            background-color: var(--white);
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .content-card h2 {
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+
+        .content-card p {
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .btn:active {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            border-radius: var(--card-radius);
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:active {
+            transform: scale(0.97);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--white);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .card-action {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        /* Calendar */
+        .calendar {
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .calendar-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .calendar-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-weight: 600;
+            padding: 8px 0;
+        }
+
+        .calendar-day {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .calendar-day.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .calendar-day.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.today {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Event indicators */
+        .event-glass {
+            background-color: #3498db;
+        }
+
+        .event-paper {
+            background-color: #1abc9c;
+        }
+
+        .event-plastic {
+            background-color: #e67e22;
+        }
+
+        .event-metal {
+            background-color: #f1c40f;
+        }
+
+        .event-organic {
+            background-color: #795548;
+        }
+
+        .event-electronics {
+            background-color: #9b59b6;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border-radius: var(--card-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:active {
+            transform: scale(0.97);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+        }
+
+        .feature-1 .feature-icon {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--primary);
+        }
+
+        .feature-2 .feature-icon {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--secondary);
+        }
+
+        .feature-3 .feature-icon {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+
+        .feature-4 .feature-icon {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+
+        .feature-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .feature-desc {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Challenges */
+        .challenge-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .challenge-item:last-child {
+            border-bottom: none;
+        }
+
+        .challenge-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .challenge-info {
+            flex: 1;
+        }
+
+        .challenge-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .challenge-desc {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .challenge-points {
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tab.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        /* List Items */
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .list-info {
+            flex: 1;
+        }
+
+        .list-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .list-desc {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Map */
+        .map-container {
+            height: 200px;
+            background: linear-gradient(135deg, #a2d4ec 0%, #a2f2c5 100%);
+            border-radius: var(--card-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-container::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="white" opacity="0.2" x="0" y="0" width="100" height="100"/></svg>');
+            background-size: 20px 20px;
+        }
+
+        .map-point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.3);
+        }
+
+        .map-point:nth-child(1) {
+            top: 30%;
+            left: 40%;
+        }
+
+        .map-point:nth-child(2) {
+            top: 50%;
+            left: 60%;
+            background-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.3);
+        }
+
+        .map-point:nth-child(3) {
+            top: 70%;
+            left: 30%;
+            background-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(255, 127, 80, 0.3);
+        }
+
+        /* Collection Types */
+        .collection-types {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .collection-type {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            background-color: var(--white);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            width: 80px;
+        }
+
+        .collection-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .collection-name {
+            font-size: 0.7rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Ranking */
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .ranking-position {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .ranking-item:nth-child(1) .ranking-position {
+            background-color: gold;
+            color: var(--dark);
+        }
+
+        .ranking-item:nth-child(2) .ranking-position {
+            background-color: silver;
+            color: var(--dark);
+        }
+
+        .ranking-item:nth-child(3) .ranking-position {
+            background-color: #cd7f32;
+            color: white;
+        }
+
+        .ranking-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .ranking-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .ranking-points {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Profile */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-dark);
+            font-size: 2rem;
+        }
+
+        .profile-info h2 {
+            margin-bottom: 5px;
+        }
+
+        .profile-level {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: var(--light);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 5px;
+            width: 65%;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin-bottom: 15px;
+        }
+
+        .accordion-header {
+            padding: 15px;
+            background-color: var(--light);
+            border-radius: var(--card-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .accordion-title {
+            font-weight: 600;
+        }
+
+        .accordion-content {
+            padding: 15px;
+            display: none;
+        }
+
+        .accordion.active .accordion-content {
+            display: block;
+        }
+
+        /* Bottom Sheet */
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+        }
+
+        .bottom-sheet.active {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 5px;
+            background-color: var(--light);
+            border-radius: 3px;
+            margin: 15px auto;
+        }
+
+        .sheet-content {
+            padding: 0 20px 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 600px;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay para o menu -->
+    <div class="menu-overlay" id="menu-overlay"></div>
+
+    <!-- Menu Lateral -->
+    <div class="side-menu" id="side-menu">
+        <div class="menu-header">
+            <div class="menu-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="menu-user-info">
+                <h3>Maria Silva</h3>
+                <p>Nível 7 • Guardião Regional</p>
+            </div>
+        </div>
+        
+        <div class="menu-title">Menu Principal</div>
+        
+        <div class="menu-items">
+            <a href="#" class="menu-item" data-section="terms">
+                <i class="fas fa-file-contract"></i>
+                <span>Termos e Condições</span>
+            </a>
+            <a href="#" class="menu-item" data-section="personal-data">
+                <i class="fas fa-address-card"></i>
+                <span>Dados Pessoais</span>
+            </a>
+            <a href="#" class="menu-item" data-section="units">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Unidades</span>
+            </a>
+            <a href="#" class="menu-item" data-section="points">
+                <i class="fas fa-coins"></i>
+                <span>Pontos</span>
+            </a>
+            <a href="#" class="menu-item" data-section="complaint">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Denúncia Verde</span>
+            </a>
+            <a href="#" class="menu-item" data-section="library">
+                <i class="fas fa-book"></i>
+                <span>Biblioteca</span>
+            </a>
+            <a href="#" class="menu-item" data-section="settings">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-recycle"></i>
+                    <span>ReciTech</span>
+                </div>
+                <div class="header-actions">
+                    <div class="notification-badge">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <i class="fas fa-bars" id="menu-toggle"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- App Content -->
+    <main class="app-content">
+        <div class="container">
+            <!-- Home Section -->
+            <div class="section active" id="home">
+                <div class="welcome-banner">
+                    <div class="welcome-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="welcome-text">
+                        <h2>Olá, Maria!</h2>
+                        <p>Você já evitou 42kg de CO² esta semana</p>
+                    </div>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value">1.240</div>
+                        <div class="stat-label">Pontos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">12º</div>
+                        <div class="stat-label">No Ranking</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Desafios</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">83%</div>
+                        <div class="stat-label">Meta Semanal</div>
+                    </div>
+                </div>
+
+                <!-- Calendar -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Calendário Sustentável</div>
+                        <div class="card-action">Set 2023</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="calendar">
+                            <div class="calendar-header">
+                                <div class="calendar-nav">
+                                    <div class="calendar-btn">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </div>
+                                    <div class="calendar-title">Setembro 2023</div>
+                                    <div class="calendar-btn">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                                <div class="calendar-btn">
+                                    Hoje
+                                </div>
+                            </div>
+
+                            <div class="calendar-grid">
+                                <div class="calendar-weekday">Dom</div>
+                                <div class="calendar-weekday">Seg</div>
+                                <div class="calendar-weekday">Ter</div>
+                                <div class="calendar-weekday">Qua</div>
+                                <div class="calendar-weekday">Qui</div>
+                                <div class="calendar-weekday">Sex</div>
+                                <div class="calendar-weekday">Sáb</div>
+
+                                <!-- Empty days -->
+                                <div class="calendar-day"></div>
+                                <div class="calendar-day"></div>
+                                <div class="calendar-day"></div>
+                                <div class="calendar-day"></div>
+                                <div class="calendar-day"></div>
+                                <div class="calendar-day">1</div>
+                                <div class="calendar-day has-event today" data-event="plastic">2</div>
+                                <div class="calendar-day has-event" data-event="glass">3</div>
+                                <div class="calendar-day">4</div>
+                                <div class="calendar-day">5</div>
+                                <div class="calendar-day has-event" data-event="paper">6</div>
+                                <div class="calendar-day">7</div>
+                                <div class="calendar-day">8</div>
+                                <div class="calendar-day">9</div>
+                                <div class="calendar-day has-event" data-event="electronics">10</div>
+                                <div class="calendar-day">11</div>
+                                <div class="calendar-day">12</div>
+                                <div class="calendar-day">13</div>
+                                <div class="calendar-day">14</div>
+                                <div class="calendar-day has-event" data-event="organic">15</div>
+                                <div class="calendar-day">16</div>
+                                <div class="calendar-day">17</div>
+                                <div class="calendar-day">18</div>
+                                <div class="calendar-day">19</div>
+                                <div class="calendar-day has-event" data-event="metal">20</div>
+                                <div class="calendar-day">21</div>
+                                <div class="calendar-day">22</div>
+                                <div class="calendar-day">23</div>
+                                <div class="calendar-day">24</div>
+                                <div class="calendar-day has-event" data-event="plastic">25</div>
+                                <div class="calendar-day">26</div>
+                                <div class="calendar-day">27</div>
+                                <div class="calendar-day">28</div>
+                                <div class="calendar-day">29</div>
+                                <div class="calendar-day has-event" data-event="glass">30</div>
+                            </div>
+                        </div>
+
+                        <!-- Collection Types -->
+                        <div class="collection-types">
+                            <div class="collection-type">
+                                <div class="collection-icon" style="background-color: #3498db;">
+                                    <i class="fas fa-glass"></i>
+                                </div>
+                                <div class="collection-name">Vidro</div>
+                            </div>
+                            <div class="collection-type">
+                                <div class="collection-icon" style="background-color: #1abc9c;">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="collection-name">Papel</div>
+                            </div>
+                            <div class="collection-type">
+                                <div class="collection-icon" style="background-color: #e67e22;">
+                                    <i class="fas fa-wine-bottle"></i>
+                                </div>
+                                <div class="collection-name">Plástico</div>
+                            </div>
+                            <div class="collection-type">
+                                <div class="collection-icon" style="background-color: #f1c40f;">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="collection-name">Metal</div>
+                            </div>
+                            <div class="collection-type">
+                                <div class="collection-icon" style="background-color: #795548;">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div class="collection-name">Orgânico</div>
+                            </div>
+                            <div class="collection-type">
+                                <div class="collection-icon" style="background-color: #9b59b6;">
+                                    <i class="fas fa-plug"></i>
+                                </div>
+                                <div class="collection-name">Eletrônicos</div>
+                            </div>
+                        </div>
+
+                        <!-- Today's Alert -->
+                        <div class="card" style="background-color: rgba(52, 152, 219, 0.1); border-left: 4px solid #3498db;">
+                            <div class="card-content">
+                                <div style="display: flex; align-items: flex-start;">
+                                    <i class="fas fa-info-circle" style="color: #3498db; margin-right: 10px; font-size: 1.2rem;"></i>
+                                    <div>
+                                        <h3 style="margin-bottom: 5px; color: #3498db;">Hoje tem coleta de plástico!</h3>
+                                        <p style="color: #2c3e50; font-size: 0.9rem;">Das 08:00 às 12:00 no seu bairro</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-block" style="background-color: #3498db; margin-top: 15px;">
+                                    Preparar Descarte
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="features-grid">
+                    <div class="feature-card feature-1">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <div class="feature-title">Agendar</div>
+                        <div class="feature-desc">Coleta em casa</div>
+                    </div>
+                    <div class="feature-card feature-2">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <div class="feature-title">Pontos</div>
+                        <div class="feature-desc">Ver no mapa</div>
+                    </div>
+                    <div class="feature-card feature-3">
+                        <div class="feature-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="feature-title">Desafios</div>
+                        <div class="feature-desc">Ganhe pontos</div>
+                    </div>
+                    <div class="feature-card feature-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="feature-title">Aprender</div>
+                        <div class="feature-desc">Biblioteca verde</div>
+                    </div>
+                </div>
+
+                <!-- Current Challenges -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Desafios em Destaque</div>
+                        <div class="card-action">Ver todos</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="challenge-item">
+                            <div class="challenge-icon" style="background-color: #3498db;">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <div class="challenge-info">
+                                <div class="challenge-title">Reciclagem de Eletrônicos</div>
+                                <div class="challenge-desc">Descarte 3 itens eletrônicos</div>
+                            </div>
+                            <div class="challenge-points">+80 pts</div>
+                        </div>
+                        <div class="challenge-item">
+                            <div class="challenge-icon" style="background-color: #2ecc71;">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="challenge-info">
+                                <div class="challenge-title">Redução de Plástico</div>
+                                <div class="challenge-desc">Use ecobag em 5 compras</div>
+                            </div>
+                            <div class="challenge-points">+50 pts</div>
+                        </div>
+                        <div class="challenge-item">
+                            <div class="challenge-icon" style="background-color: #f39c12;">
+                                <i class="fas fa-bicycle"></i>
+                            </div>
+                            <div class="challenge-info">
+                                <div class="challenge-title">Mobilidade Sustentável</div>
+                                <div class="challenge-desc">Use transporte alternativo</div>
+                            </div>
+                            <div class="challenge-points">+60 pts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Section -->
+            <div class="section" id="map">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Pontos de Coleta</div>
+                        <div class="card-action">Filtrar</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="map-container">
+                            <div class="map-point"></div>
+                            <div class="map-point"></div>
+                            <div class="map-point"></div>
+                            <i class="fas fa-map-marker-alt" style="font-size: 2rem; color: var(--accent); z-index: 2;"></i>
+                        </div>
+
+                        <div class="collection-types">
+                            <div class="collection-type" style="background-color: rgba(52, 152, 219, 0.1);">
+                                <div class="collection-icon" style="background-color: #3498db;">
+                                    <i class="fas fa-glass"></i>
+                                </div>
+                                <div class="collection-name">Vidro</div>
+                            </div>
+                            <div class="collection-type">
+                                <div class="collection-icon" style="background-color: #1abc9c;">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="collection-name">Papel</div>
+                            </div>
+                            <div class="collection-type" style="background-color: rgba(231, 76, 60, 0.1);">
+                                <div class="collection-icon" style="background-color: #e74c3c;">
+                                    <i class="fas fa-plug"></i>
+                                </div>
+                                <div class="collection-name">Eletrônicos</div>
+                            </div>
+                            <div class="collection-type">
+                                <div class="collection-icon" style="background-color: #795548;">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div class="collection-name">Orgânico</div>
+                            </div>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px;">Pontos Próximos</h3>
+                        
+                        <div class="list-item">
+                            <div class="list-icon" style="background-color: #3498db;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="list-info">
+                                <div class="list-title">Ecoponto Central</div>
+                                <div class="list-desc">1.2 km • Aceita vidro, papel e plástico</div>
+                            </div>
+                            <button class="btn" style="padding: 8px 12px; font-size: 0.8rem;">Ver rota</button>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon" style="background-color: #e74c3c;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="list-info">
+                                <div class="list-title">Loja de Eletrônicos</div>
+                                <div class="list-desc">0.8 km • Coleta pilhas e baterias</div>
+                            </div>
+                            <button class="btn" style="padding: 8px 12px; font-size: 0.8rem;">Ver rota</button>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon" style="background-color: #2ecc71;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="list-info">
+                                <div class="list-title">Supermercado Verde</div>
+                                <div class="list-desc">1.5 km • Coleta óleo de cozinha</div>
+                            </div>
+                            <button class="btn" style="padding: 8px 12px; font-size: 0.8rem;">Ver rota</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ranking Section -->
+            <div class="section" id="ranking">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Ranking EcoInfluencer</div>
+                        <div class="card-action">Semanal</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="tabs">
+                            <div class="tab active">Individual</div>
+                            <div class="tab">Equipes</div>
+                        </div>
+
+                        <div class="ranking-item">
+                            <div class="ranking-position">1</div>
+                            <div class="ranking-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Carlos Silva</div>
+                                <div class="ranking-points">3.450 pontos</div>
+                            </div>
+                            <div class="challenge-points">🥇</div>
+                        </div>
+
+                        <div class="ranking-item">
+                            <div class="ranking-position">2</div>
+                            <div class="ranking-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Ana Santos</div>
+                                <div class="ranking-points">3.120 pontos</div>
+                            </div>
+                            <div class="challenge-points">🥈</div>
+                        </div>
+
+                        <div class="ranking-item">
+                            <div class="ranking-position">3</div>
+                            <div class="ranking-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Pedro Costa</div>
+                                <div class="ranking-points">2.980 pontos</div>
+                            </div>
+                            <div class="challenge-points">🥉</div>
+                        </div>
+
+                        <div class="ranking-item">
+                            <div class="ranking-position">4</div>
+                            <div class="ranking-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Marina Oliveira</div>
+                                <div class="ranking-points">2.750 pontos</div>
+                            </div>
+                        </div>
+
+                        <div class="ranking-item">
+                            <div class="ranking-position">12</div>
+                            <div class="ranking-avatar" style="background-color: var(--primary-light);">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Você</div>
+                                <div class="ranking-points">1.240 pontos</div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-block" style="margin-top: 20px;">Ver Ranking Completo</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Minha Equipe</div>
+                    </div>
+                    <div class="card-content">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="width: 50px; height: 50px; border-radius: 50%; background-color: var(--primary-light); display: flex; align-items: center; justify-content: center; margin-right: 15px; color: var(--primary-dark); font-size: 1.5rem;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <h3>Guardiões Verdes</h3>
+                                <p style="color: var(--gray); font-size: 0.9rem;">5º lugar no ranking de equipes</p>
+                            </div>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <span style="font-size: 0.9rem;">7.840 pontos</span>
+                            <span style="font-size: 0.9rem;">Meta: 12.000 pontos</span>
+                        </div>
+
+                        <button class="btn btn-block">Convidar Amigos</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="section" id="info">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Central de Ajuda</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="accordion">
+                            <div class="accordion-header">
+                                <div class="accordion-title">Como ganhar pontos?</div>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <p>Você ganha pontos realizando ações sustentáveis como:</p>
+                                <ul style="padding-left: 20px; margin: 10px 0;">
+                                    <li>Reciclar materiais (+20 pontos)</li>
+                                    <li>Fazer denúncias ambientais (+30 pontos)</li>
+                                    <li>Participar de eventos e mutirões (+80 pontos)</li>
+                                    <li>Completar desafios semanais (+50 pontos)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header">
+                                <div class="accordion-title">Como fazer uma denúncia?</div>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <p>Para fazer uma denúncia ambiental:</p>
+                                <ol style="padding-left: 20px; margin: 10px 0;">
+                                    <li>Toque no botão "Denúncia Verde" no menu</li>
+                                    <li>Selecione o tipo de problema ambiental</li>
+                                    <li>Tire fotos do local</li>
+                                    <li>Descreva o problema em detalhes</li>
+                                    <li>Envie a denúncia para análise</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header">
+                                <div class="accordion-title">Como usar o calendário?</div>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <p>O calendário mostra os dias de coleta seletiva na sua região:</p>
+                                <ul style="padding-left: 20px; margin: 10px 0;">
+                                    <li>Cores diferentes representam tipos de coleta</li>
+                                    <li>Toque em um dia para ver detalhes da coleta</li>
+                                    <li>Use os filtros para ver tipos específicos de material</li>
+                                    <li>Ative lembretes para não perder a coleta</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-comments"></i> Falar com Suporte
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge Section -->
+            <div class="section" id="challenge">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Desafio da Semana</div>
+                    </div>
+                    <div class="card-content">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white; font-size: 2rem;">
+                                <i class="fas fa-recycle"></i>
+                            </div>
+                            <h2 style="margin: 15px 0 5px;">Separar 5 tipos de recicláveis</h2>
+                            <p style="color: var(--gray);">Ganhe 50 pontos ao completar este desafio</p>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 60%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <span style="font-size: 0.9rem;">3 de 5 concluídos</span>
+                            <span style="font-size: 0.9rem;">60%</span>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 10px; background-color: var(--primary); color: white;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Plástico</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 10px; background-color: var(--primary); color: white;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Vidro</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 10px; background-color: var(--primary); color: white;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Papel</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                    <i class="fas fa-check" style="display: none;"></i>
+                                </div>
+                                <span>Metal</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                    <i class="fas fa-check" style="display: none;"></i>
+                                </div>
+                                <span>Eletrônicos</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-block">Registrar Progresso</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recompensas Disponíveis</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="list-item">
+                            <div class="list-icon" style="background-color: var(--accent);">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="list-info">
+                                <div class="list-title">Ecobag Personalizada</div>
+                                <div class="list-desc">300 pontos</div>
+                            </div>
+                            <button class="btn" style="padding: 8px 12px; font-size: 0.8rem;">Resgatar</button>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon" style="background-color: var(--warning);">
+                                <i class="fas fa-shopping-basket"></i>
+                            </div>
+                            <div class="list-info">
+                                <div class="list-title">Vale Feira Orgânica</div>
+                                <div class="list-desc">500 pontos</div>
+                            </div>
+                            <button class="btn" style="padding: 8px 12px; font-size: 0.8rem;">Resgatar</button>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon" style="background-color: var(--secondary);">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="list-info">
+                                <div class="list-title">Curso de Compostagem</div>
+                                <div class="list-desc">800 pontos</div>
+                            </div>
+                            <button class="btn" style="padding: 8px 12px; font-size: 0.8rem;">Resgatar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="section" id="profile">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="profile-info">
+                                <h2>Maria Silva</h2>
+                                <div class="profile-level">Nível 7 • Guardião Regional</div>
+                                <div style="color: var(--gray); font-size: 0.9rem;">Umuarama-PR</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <div class="stat-value">42</div>
+                                <div class="stat-label">Dias ativos</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">28</div>
+                                <div class="stat-label">Desafios</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Conquistas</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">5º</div>
+                                <div class="stat-label">Ranking Local</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Minhas Metas</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 15px;">Reduzir plástico em 30%</h3>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 22%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <span style="font-size: 0.9rem;">22% concluído</span>
+                            <span style="font-size: 0.9rem;">Meta: 30%</span>
+                        </div>
+
+                        <button class="btn btn-block" style="margin-bottom: 20px;">Registrar Ação</button>
+
+                        <div class="list-item">
+                            <div class="list-icon" style="background-color: var(--primary);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="list-info">
+                                <div class="list-title">Usei garrafa reutilizável</div>
+                                <div class="list-desc">Hoje • +10 pontos</div>
+                            </div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon" style="background-color: var(--primary);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="list-info">
+                                <div class="list-title">Recusei canudo plástico</div>
+                                <div class="list-desc">Ontem • +5 pontos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Configurações</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="list-item">
+                            <div class="list-info">
+                                <div class="list-title">Notificações</div>
+                                <div class="list-desc">Ativar lembretes de coleta</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-info">
+                                <div class="list-title">Modo Escuro</div>
+                                <div class="list-desc">Interface com cores escuras</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-info">
+                                <div class="list-title">Privacidade</div>
+                                <div class="list-desc">Controlar dados compartilhados</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-block" style="background-color: var(--danger); margin-top: 15px;">Sair</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Sections -->
+            <!-- Termos e Condições Section -->
+            <div class="section" id="terms">
+                <div class="content-card">
+                    <h2>Termos e Condições</h2>
+                    <p>Ao utilizar o ReciTech, você concorda com os seguintes termos e condições:</p>
+                    <p>1. Você é responsável por todas as atividades que ocorrem sob sua conta.</p>
+                    <p>2. Você não deve usar o serviço para qualquer finalidade ilegal ou não autorizada.</p>
+                    <p>3. O ReciTech pode coletar and usar informações de localização para fornecer serviços relevantes.</p>
+                    <p>4. Podemos modificar estes termos a qualquer momento, notificando os usuários.</p>
+                    <button class="btn btn-block" onclick="showHome()">Voltar ao Início</button>
+                </div>
+            </div>
+
+            <!-- Dados Pessoais Section -->
+            <div class="section" id="personal-data">
+                <div class="content-card">
+                    <h2>Dados Pessoais</h2>
+                    <p>Gerencie suas informações pessoais e preferências:</p>
+                    <p><strong>Nome:</strong> Maria Silva</p>
+                    <p><strong>Email:</strong> maria.silva@exemplo.com</p>
+                    <p><strong>Localização:</strong> Umuarama-PR</p>
+                    <p><strong>Metas de Sustentabilidade:</strong></p>
+                    <ul>
+                        <li>Reduzir plástico em 30%</li>
+                        <li>Reciclar 80% dos resíduos</li>
+                        <li>Usar transporte sustentável 3x por semana</li>
+                    </ul>
+                    <button class="btn btn-block" onclick="showHome()">Voltar ao Início</button>
+                </div>
+            </div>
+
+            <!-- Unidades Section -->
+            <div class="section" id="units">
+                <div class="content-card">
+                    <h2>Unidades</h2>
+                    <p>Encontre pontos de coleta e unidades de reciclagem próximos a você:</p>
+                    <div class="list-item">
+                        <i class="fas fa-map-marker-alt" style="color: #3498db;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Ecoponto Central</div>
+                            <div class="list-desc">1.2 km • Aceita vidro, papel e plástico</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <i class="fas fa-map-marker-alt" style="color: #e74c3c;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Loja de Eletrônicos</div>
+                            <div class="list-desc">0.8 km • Coleta pilhas e baterias</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <i class="fas fa-map-marker-alt" style="color: #2ecc71;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Supermercado Verde</div>
+                            <div class="list-desc">1.5 km • Coleta óleo de cozinha</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-block" onclick="showHome()">Voltar ao Início</button>
+                </div>
+            </div>
+
+            <!-- Pontos Section -->
+            <div class="section" id="points">
+                <div class="content-card">
+                    <h2>Pontos</h2>
+                    <p>Seu saldo atual: <strong>1.240 pontos</strong></p>
+                    <p>Troque seus pontos por recompensas sustentáveis:</p>
+                    <div class="list-item">
+                        <i class="fas fa-shopping-bag" style="color: #ff7f50;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Ecobag Personalizada</div>
+                            <div class="list-desc">300 pontos</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <i class="fas fa-shopping-basket" style="color: #f39c12;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Vale Feira Orgânica</div>
+                            <div class="list-desc">500 pontos</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <i class="fas fa-graduation-cap" style="color: #3498db;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Curso de Compostagem</div>
+                            <div class="list-desc">800 pontos</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-block" onclick="showHome()">Voltar ao Início</button>
+                </div>
+            </div>
+
+            <!-- Denúncia Verde Section -->
+            <div class="section" id="complaint">
+                <div class="content-card">
+                    <h2>Denúncia Verde</h2>
+                    <p>Reporte problemas ambientais em sua comunidade:</p>
+                    <form>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Problema</label>
+                            <select style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                                <option>Descarte Irregular de Lixo</option>
+                                <option>Poluição de Rios ou Lagos</option>
+                                <option>Queimadas Ilegais</option>
+                                <option>Desmatamento</option>
+                                <option>Poluição Sonora</option>
+                                <option>Outro</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Localização</label>
+                            <input type="text" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;" placeholder="Onde o problema ocorreu?">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Descrição</label>
+                            <textarea style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; min-height: 100px;" placeholder="Descreva o problema em detalhes"></textarea>
+                        </div>
+                        <button class="btn btn-block">Enviar Denúncia</button>
+                    </form>
+                    <button class="btn btn-block" style="background-color: #95a5a6; margin-top: 15px;" onclick="showHome()">Voltar ao Início</button>
+                </div>
+            </div>
+
+            <!-- Biblioteca Section -->
+            <div class="section" id="library">
+                <div class="content-card">
+                    <h2>Biblioteca</h2>
+                    <p>Acesse conteúdos educativos sobre sustentabilidade:</p>
+                    <div class="list-item">
+                        <i class="fas fa-book" style="color: #9b59b6;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Guia de Reciclagem Completo</div>
+                            <div class="list-desc">Aprenda a separar corretamente todos os tipos de materiais</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <i class="fas fa-film" style="color: #e74c3c;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Compostagem Doméstica</div>
+                            <div class="list-desc">Vídeo tutorial para fazer compostagem em casa</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <i class="fas fa-chart-bar" style="color: #3498db;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Estatísticas de Reciclagem no Brasil</div>
+                            <div class="list-desc">Dados atualizados sobre reciclagem no país</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-block" onclick="showHome()">Voltar ao Início</button>
+                </div>
+            </div>
+
+            <!-- Configurações Section -->
+            <div class="section" id="settings">
+                <div class="content-card">
+                    <h2>Configurações</h2>
+                    <p>Personalize sua experiência no ReciTech:</p>
+                    <div class="list-item">
+                        <i class="fas fa-bell" style="color: #f39c12;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Notificações</div>
+                            <div class="list-desc">Ativar lembretes de coleta</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="list-item">
+                        <i class="fas fa-moon" style="color: #2c3e50;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Modo Escuro</div>
+                            <div class="list-desc">Interface com cores escuras</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="list-item">
+                        <i class="fas fa-map-marker-alt" style="color: #e74c3c;"></i>
+                        <div class="list-info">
+                            <div class="list-title">Compartilhar Localização</div>
+                            <div class="list-desc">Para encontrar pontos de coleta próximos</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <button class="btn btn-block" onclick="showHome()">Voltar ao Início</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" data-target="home">
+            <i class="fas fa-home"></i>
+            <span class="nav-label">Início</span>
+        </div>
+        <div class="nav-item" data-target="map">
+            <i class="fas fa-map-marker-alt"></i>
+            <span class="nav-label">Mapa</span>
+        </div>
+        <div class="nav-item" data-target="ranking">
+            <i class="fas fa-trophy"></i>
+            <span class="nav-label">Ranking</span>
+        </div>
+        <div class="nav-item" data-target="info">
+            <i class="fas fa-info-circle"></i>
+            <span class="nav-label">Informações</span>
+        </div>
+        <div class="nav-item" data-target="challenge">
+            <i class="fas fa-medal"></i>
+            <span class="nav-label">Desafio</span>
+        </div>
+        <div class="nav-item" data-target="profile">
+            <i class="fas fa-user"></i>
+            <span class="nav-label">Perfil</span>
+        </div>
+    </nav>
+
+    <!-- Bottom Sheet -->
+    <div class="overlay" id="overlay"></div>
+    <div class="bottom-sheet" id="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-content">
+            <h2 style="margin-bottom: 15px;">Coleta de Plástico</h2>
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <i class="fas fa-clock" style="color: var(--gray); margin-right: 10px;"></i>
+                <span>Hoje, 08:00 - 12:00</span>
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <i class="fas fa-map-marker-alt" style="color: var(--gray); margin-right: 10px;"></i>
+                <span>Setor Norte - Sua região</span>
+            </div>
+            
+            <h3 style="margin-bottom: 15px;">Pontos de Entrega Voluntária</h3>
+            <div class="list-item">
+                <div class="list-icon" style="background-color: #3498db;">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="list-info">
+                    <div class="list-title">PEV Praça Central</div>
+                    <div class="list-desc">1,2 km • Aberto até 18h</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--gray);"></i>
+            </div>
+            
+            <h3 style="margin: 20px 0 15px;">Checklist de Preparo</h3>
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <div style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="fas fa-check" style="color: var(--primary); display: none;"></i>
+                    </div>
+                    <span>Lavar embalagens</span>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <div style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="fas fa-check" style="color: var(--primary); display: none;"></i>
+                    </div>
+                    <span>Remover rótulos</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="fas fa-check" style="color: var(--primary); display: none;"></i>
+                    </div>
+                    <span>Separar por tipo</span>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" style="flex: 1; background-color: var(--light); color: var(--dark);">Lembrar-me</button>
+                <button class="btn" style="flex: 1;">Traçar Rota</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menu functionality
+        function openMenu() {
+            document.getElementById('side-menu').classList.add('active');
+            document.getElementById('menu-overlay').classList.add('active');
+        }
+
+        function closeMenu() {
+            document.getElementById('side-menu').classList.remove('active');
+            document.getElementById('menu-overlay').classList.remove('active');
+        }
+
+        function showHome() {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show home section
+            document.getElementById('home').classList.add('active');
+            
+            // Update bottom nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector('[data-target="home"]').classList.add('active');
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show requested section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update bottom nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+
+        document.getElementById('menu-toggle').addEventListener('click', openMenu);
+        document.getElementById('menu-overlay').addEventListener('click', closeMenu);
+
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target section
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+                
+                // Close menu if open
+                closeMenu();
+            });
+        });
+
+        // Menu items functionality
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                showSection(section);
+                closeMenu();
+            });
+        });
+
+        // Calendar day click event
+        document.querySelectorAll('.calendar-day').forEach(day => {
+            day.addEventListener('click', function() {
+                // Show bottom sheet
+                document.getElementById('bottom-sheet').classList.add('active');
+                document.getElementById('overlay').classList.add('active');
+            });
+        });
+
+        // Close bottom sheet when overlay is clicked
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('bottom-sheet').classList.remove('active');
+            this.classList.remove('active');
+        });
+
+        // Add event indicators to calendar days
+        document.querySelectorAll('.calendar-day.has-event').forEach(day => {
+            const eventType = day.getAttribute('data-event');
+            const indicator = document.createElement('div');
+            indicator.classList.add('event-indicator');
+            
+            switch(eventType) {
+                case 'glass':
+                    indicator.style.backgroundColor = '#3498db';
+                    break;
+                case 'paper':
+                    indicator.style.backgroundColor = '#1abc9c';
+                    break;
+                case 'plastic':
+                    indicator.style.backgroundColor = '#e67e22';
+                    break;
+                case 'metal':
+                    indicator.style.backgroundColor = '#f1c40f';
+                    break;
+                case 'organic':
+                    indicator.style.backgroundColor = '#795548';
+                    break;
+                case 'electronics':
+                    indicator.style.backgroundColor = '#9b59b6';
+                    break;
+            }
+            
+            day.appendChild(indicator);
+        });
+
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const accordion = this.parentElement;
+                accordion.classList.toggle('active');
+                
+                const icon = this.querySelector('i');
+                if (accordion.classList.contains('active')) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            });
+        });
+
+        // Tabs functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabsContainer = this.parentElement;
+                tabsContainer.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Add toggle switch styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 50px;
+                height: 24px;
+            }
+            
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+            
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+            }
+            
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 16px;
+                width: 16px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: .4s;
+            }
+            
+            input:checked + .slider {
+                background-color: var(--primary);
+            }
+            
+            input:checked + .slider:before {
+                transform: translateX(26px);
+            }
+            
+            .slider.round {
+                border-radius: 24px;
+            }
+            
+            .slider.round:before {
+                border-radius: 50%;
+            }
+            
+            .list-item {
+                display: flex;
+                align-items: center;
+                padding: 15px;
+                border-bottom: 1px solid var(--light);
+            }
+            
+            .list-item:last-child {
+                border-bottom: none;
+            }
+            
+            .list-info {
+                flex: 1;
+                margin-left: 15px;
+            }
+            
+            .list-title {
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+            
+            .list-desc {
+                font-size: 0.85rem;
+                color: var(--gray);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
