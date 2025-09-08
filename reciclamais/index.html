@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recicla+</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .material-icon {
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #10b981;
+            transition: width 0.3s ease;
+        }
+        
+        .bottom-nav {
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .active-nav {
+            color: #10b981;
+            transform: scale(1.1);
+        }
+        
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 480px;
+                margin: 0 auto;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+            
+            .bottom-nav {
+                max-width: 480px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div id="app" class="pb-16 relative">
+        <!-- Login Screen -->
+        <div id="login-screen" class="flex flex-col items-center justify-center h-screen bg-green-50 px-4">
+            <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6 fade-in">
+                <div class="text-center mb-6">
+                    <i class="fas fa-recycle text-4xl text-green-600 mb-2"></i>
+                    <h1 class="text-2xl font-bold text-green-700">Recicla+</h1>
+                    <p class="text-gray-600 mt-1">Transforme resíduos em recompensas</p>
+                </div>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" placeholder="seu@email.com" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                        <input type="password" id="password" placeholder="••••••••" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <button type="submit" 
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Entrar
+                    </button>
+                </form>
+                <div class="mt-4 text-center text-sm text-gray-600">
+                    Ainda não tem conta? <a href="#" class="text-green-600 hover:underline">Cadastre-se</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Content (hidden initially) -->
+        <div id="app-content" class="hidden">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4">
+                <h1 class="text-2xl font-bold text-green-700 flex items-center">
+                    <i class="fas fa-recycle mr-2"></i> Recicla+
+                </h1>
+                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center overflow-hidden">
+                    <i class="fas fa-user text-green-600 text-xl"></i>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="px-4 space-y-4">
+                <!-- Dashboard -->
+                <div id="dashboard" class="space-y-4 fade-in">
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <h2 class="font-bold text-xl mb-3 flex items-center">
+                            <i class="fas fa-chart-line text-green-600 mr-2"></i> Resumo Semanal
+                        </h2>
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <p class="text-lg text-green-700 font-semibold" id="total-recycled">0 kg</p>
+                                <p class="text-sm text-gray-600">reciclados esta semana</p>
+                            </div>
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-leaf text-green-600 text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <p class="text-sm text-gray-600 mb-1">Seu progresso</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Continue assim e desbloqueie novos cupons!</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <h2 class="font-bold text-xl mb-3 flex items-center">
+                            <i class="fas fa-wallet text-green-600 mr-2"></i> Saldo Atual
+                        </h2>
+                        <p class="text-3xl font-semibold text-green-700 mb-4" id="current-balance">R$ 0,00</p>
+                        <button id="withdraw-btn" 
+                            class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-money-bill-wave mr-2"></i> Solicitar Saque via Pix
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <h2 class="font-bold text-xl mb-3 flex items-center">
+                            <i class="fas fa-tags text-green-600 mr-2"></i> Tabela de Preços
+                        </h2>
+                        <ul class="space-y-3" id="price-table">
+                            <!-- Prices will be inserted here by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div id="history" class="hidden fade-in">
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <h2 class="font-bold text-xl mb-4 flex items-center">
+                            <i class="fas fa-history text-green-600 mr-2"></i> Histórico de Reciclagem
+                        </h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="text-left border-b text-gray-600">
+                                        <th class="pb-2">Tipo</th>
+                                        <th class="pb-2">Material</th>
+                                        <th class="pb-2">Qtd</th>
+                                        <th class="pb-2">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-table">
+                                    <!-- History items will be inserted here by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <p id="empty-history" class="text-center text-gray-500 py-4">Nenhum registro encontrado</p>
+                    </div>
+                </div>
+
+                <!-- Ranking -->
+                <div id="ranking" class="hidden fade-in">
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <h2 class="font-bold text-xl mb-4 flex items-center">
+                            <i class="fas fa-trophy text-green-600 mr-2"></i> Ranking
+                        </h2>
+                        
+                        <h3 class="font-semibold text-lg mb-2 flex items-center">
+                            <i class="fas fa-city text-gray-600 mr-2"></i> Cidade
+                        </h3>
+                        <div class="space-y-3 mb-4">
+                            <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                                <span class="bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">1</span>
+                                <span class="font-medium">João</span>
+                                <span class="ml-auto">50 kg</span>
+                            </div>
+                            <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                                <span class="bg-gray-400 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span>
+                                <span class="font-medium">Maria</span>
+                                <span class="ml-auto">38 kg</span>
+                            </div>
+                            <div class="flex items-center bg-gray-50 p-2 rounded-lg border-2 border-green-200">
+                                <span class="bg-amber-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">3</span>
+                                <span class="font-medium">Você</span>
+                                <span class="ml-auto" id="user-ranking-kg">0 kg</span>
+                            </div>
+                        </div>
+                        
+                        <h3 class="font-semibold text-lg mb-2 flex items-center">
+                            <i class="fas fa-globe-americas text-gray-600 mr-2"></i> País
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                                <span class="bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">1</span>
+                                <span class="font-medium">Ana</span>
+                                <span class="ml-auto">200 kg</span>
+                            </div>
+                            <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                                <span class="bg-gray-400 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span>
+                                <span class="font-medium">Pedro</span>
+                                <span class="ml-auto">150 kg</span>
+                            </div>
+                            <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                                <span class="bg-amber-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">3</span>
+                                <span class="font-medium">Luiza</span>
+                                <span class="ml-auto">120 kg</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-3 bg-green-50 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2 flex items-center">
+                                <i class="fas fa-user text-green-600 mr-2"></i> Seu Progresso
+                            </h3>
+                            <p class="text-sm">Total reciclado: <span class="font-medium" id="user-total-kg">0 kg</span></p>
+                            <p class="text-sm">Saldo: <span class="font-medium" id="user-balance">R$ 0,00</span></p>
+                            <p class="text-sm">Nível: <span class="font-medium">Eco-Cidadão <i class="fas fa-leaf text-green-600"></i></span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bins -->
+                <div id="bins" class="hidden fade-in">
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <h2 class="font-bold text-xl mb-4 flex items-center">
+                            <i class="fas fa-trash-alt text-green-600 mr-2"></i> Lixeiras Próximas
+                        </h2>
+                        <div class="space-y-3" id="bins-list">
+                            <!-- Bins will be inserted here by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile -->
+                <div id="profile" class="hidden fade-in">
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <h2 class="font-bold text-xl mb-4 flex items-center">
+                            <i class="fas fa-user-circle text-green-600 mr-2"></i> Seu Perfil
+                        </h2>
+                        <div class="flex items-center mb-4">
+                            <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-user text-green-600 text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium" id="user-email">user@example.com</p>
+                                <p class="text-sm text-gray-600">Eco-Cidadão <i class="fas fa-leaf text-green-600"></i></p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-2 border-b">
+                                <span class="text-gray-600">ID do usuário</span>
+                                <span class="font-medium" id="user-id">USR-123456</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 border-b">
+                                <span class="text-gray-600">Total reciclado</span>
+                                <span class="font-medium" id="profile-total-kg">0 kg</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 border-b">
+                                <span class="text-gray-600">Saldo atual</span>
+                                <span class="font-medium" id="profile-balance">R$ 0,00</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 border-b">
+                                <span class="text-gray-600">Recompensas</span>
+                                <span class="font-medium">2 cupons</span>
+                            </div>
+                        </div>
+                        
+                        <button id="logout-btn" 
+                            class="w-full mt-6 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Sair
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around p-2 bottom-nav">
+                <button class="p-2 text-gray-600 hover:text-green-600 transition duration-200 flex flex-col items-center active-nav" data-screen="dashboard">
+                    <i class="fas fa-home text-xl"></i>
+                    <span class="text-xs mt-1">Início</span>
+                </button>
+                <button class="p-2 text-gray-600 hover:text-green-600 transition duration-200 flex flex-col items-center" data-screen="history">
+                    <i class="fas fa-history text-xl"></i>
+                    <span class="text-xs mt-1">Histórico</span>
+                </button>
+                <button class="p-2 text-gray-600 hover:text-green-600 transition duration-200 flex flex-col items-center" data-screen="ranking">
+                    <i class="fas fa-trophy text-xl"></i>
+                    <span class="text-xs mt-1">Ranking</span>
+                </button>
+                <button class="p-2 text-gray-600 hover:text-green-600 transition duration-200 flex flex-col items-center" data-screen="bins">
+                    <i class="fas fa-trash-alt text-xl"></i>
+                    <span class="text-xs mt-1">Lixeiras</span>
+                </button>
+                <button class="p-2 text-gray-600 hover:text-green-600 transition duration-200 flex flex-col items-center" data-screen="profile">
+                    <i class="fas fa-user text-xl"></i>
+                    <span class="text-xs mt-1">Perfil</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App state
+        const state = {
+            loggedIn: false,
+            email: '',
+            saldo: 0,
+            materiais: {
+                plastico: 0,
+                papelao: 0,
+                aluminio: 0,
+                vidro: 0,
+                organico: 0
+            },
+            historico: [],
+            currentScreen: 'dashboard',
+            lixeiras: [
+                { id: 1, local: "Praça Central", status: "cheia", visitada: true },
+                { id: 2, local: "Av. Brasil, 100", status: "livre", visitada: false },
+                { id: 3, local: "Mercado Municipal", status: "cheia", visitada: false },
+                { id: 4, local: "Rua das Flores, 45", status: "livre", visitada: true }
+            ],
+            userId: "USR-123456",
+            precos: {
+                plastico: 2.5,
+                papelao: 1.2,
+                aluminio: 4.0,
+                vidro: 0.8,
+                organico: 0.5
+            },
+            depositInterval: null
+        };
+
+        // DOM Elements
+        const loginScreen = document.getElementById('login-screen');
+        const appContent = document.getElementById('app-content');
+        const loginForm = document.getElementById('login-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const logoutBtn = document.getElementById('logout-btn');
+        const withdrawBtn = document.getElementById('withdraw-btn');
+        const navButtons = document.querySelectorAll('[data-screen]');
+        const screens = {
+            dashboard: document.getElementById('dashboard'),
+            history: document.getElementById('history'),
+            ranking: document.getElementById('ranking'),
+            bins: document.getElementById('bins'),
+            profile: document.getElementById('profile')
+        };
+
+        // Initialize the app
+        function init() {
+            // Login form submission
+            loginForm.addEventListener('submit', handleLogin);
+            
+            // Logout button
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            // Withdraw button
+            withdrawBtn.addEventListener('click', () => {
+                alert(`Saque de R$ ${state.saldo.toFixed(2)} solicitado via Pix!`);
+            });
+            
+            // Navigation buttons
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const screen = button.getAttribute('data-screen');
+                    switchScreen(screen);
+                    
+                    // Update active nav button
+                    navButtons.forEach(btn => {
+                        btn.classList.remove('active-nav');
+                    });
+                    button.classList.add('active-nav');
+                });
+            });
+            
+            // Simulate random deposits
+            if (state.loggedIn) {
+                simulateDeposits();
+            }
+        }
+
+        // Handle login
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (!email || !password) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            // Simulate login
+            state.loggedIn = true;
+            state.email = email;
+            
+            // Generate some random data
+            generateRandomData();
+            
+            // Hide login screen and show app content
+            loginScreen.classList.add('hidden');
+            appContent.classList.remove('hidden');
+            
+            // Update UI
+            updateUI();
+            
+            // Start simulating deposits
+            simulateDeposits();
+        }
+
+        // Handle logout
+        function handleLogout() {
+            state.loggedIn = false;
+            state.email = '';
+            state.saldo = 0;
+            state.materiais = {
+                plastico: 0,
+                papelao: 0,
+                aluminio: 0,
+                vidro: 0,
+                organico: 0
+            };
+            state.historico = [];
+            
+            // Clear interval
+            if (state.depositInterval) {
+                clearInterval(state.depositInterval);
+                state.depositInterval = null;
+            }
+            
+            // Show login screen and hide app content
+            loginScreen.classList.remove('hidden');
+            appContent.classList.add('hidden');
+            
+            // Reset form
+            loginForm.reset();
+        }
+
+        // Switch between screens
+        function switchScreen(screen) {
+            // Hide all screens
+            Object.values(screens).forEach(s => {
+                s.classList.add('hidden');
+            });
+            
+            // Show the selected screen
+            screens[screen].classList.remove('hidden');
+            state.currentScreen = screen;
+            
+            // Update specific screen if needed
+            if (screen === 'history') {
+                updateHistoryTable();
+            } else if (screen === 'bins') {
+                updateBinsList();
+            }
+        }
+
+        // Generate random data for the user
+        function generateRandomData() {
+            // Random materials
+            const materials = ['plastico', 'papelao', 'aluminio', 'vidro', 'organico'];
+            
+            // Generate 5-10 random deposits
+            const depositCount = Math.floor(Math.random() * 6) + 5;
+            
+            for (let i = 0; i < depositCount; i++) {
+                const material = materials[Math.floor(Math.random() * materials.length)];
+                const quantity = (Math.random() * 5 + 1).toFixed(2);
+                const value = (quantity * state.precos[material]).toFixed(2);
+                
+                // Add to materials
+                state.materiais[material] += parseFloat(quantity);
+                
+                // Add to history
+                state.historico.push({
+                    date: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
+                    material: material,
+                    quantity: parseFloat(quantity),
+                    value: parseFloat(value)
+                });
+                
+                // Add to balance
+                state.saldo += parseFloat(value);
+            }
+            
+            // Sort history by date
+            state.historico.sort((a, b) => b.date - a.date);
+        }
+
+        // Simulate random deposits
+        function simulateDeposits() {
+            if (state.depositInterval) {
+                clearInterval(state.depositInterval);
+            }
+            
+            state.depositInterval = setInterval(() => {
+                const materials = ['plastico', 'papelao', 'aluminio', 'vidro', 'organico'];
+                const material = materials[Math.floor(Math.random() * materials.length)];
+                const quantity = (Math.random() * 2 + 0.5).toFixed(2);
+                const value = (quantity * state.precos[material]).toFixed(2);
+                
+                // Add to materials
+                state.materiais[material] += parseFloat(quantity);
+                
+                // Add to history
+                state.historico.unshift({
+                    date: new Date(),
+                    material: material,
+                    quantity: parseFloat(quantity),
+                    value: parseFloat(value)
+                });
+                
+                // Add to balance
+                state.saldo += parseFloat(value);
+                
+                // Update UI
+                updateUI();
+                
+                // Show notification
+                showNotification(`Você reciclou ${quantity}kg de ${getMaterialName(material)} e ganhou R$ ${value}!`);
+            }, 30000); // Every 30 seconds
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 fade-in';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('fade-in');
+                notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Get material name
+        function getMaterialName(key) {
+            const names = {
+                plastico: 'plástico',
+                papelao: 'papelão',
+                aluminio: 'alumínio',
+                vidro: 'vidro',
+                organico: 'orgânico'
+            };
+            return names[key] || key;
+        }
+
+        // Get material icon
+        function getMaterialIcon(key) {
+            const icons = {
+                plastico: 'fas fa-water-bottle',
+                papelao: 'fas fa-box',
+                aluminio: 'fas fa-wine-bottle',
+                vidro: 'fas fa-glass-whiskey',
+                organico: 'fas fa-apple-alt'
+            };
+            return icons[key] || 'fas fa-trash';
+        }
+
+        // Update UI
+        function updateUI() {
+            // Calculate total recycled this week
+            const now = new Date();
+            const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            
+            const weeklyTotal = state.historico
+                .filter(item => item.date >= oneWeekAgo)
+                .reduce((sum, item) => sum + item.quantity, 0);
+            
+            // Update dashboard
+            document.getElementById('total-recycled').textContent = weeklyTotal.toFixed(2) + ' kg';
+            document.getElementById('current-balance').textContent = 'R$ ' + state.saldo.toFixed(2);
+            
+            // Update progress bar (0-100%)
+            const progress = Math.min(weeklyTotal / 10 * 100, 100);
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            // Update price table
+            updatePriceTable();
+            
+            // Update profile
+            document.getElementById('user-email').textContent = state.email;
+            document.getElementById('user-id').textContent = state.userId;
+            
+            const totalRecycled = Object.values(state.materiais).reduce((sum, qty) => sum + qty, 0);
+            document.getElementById('profile-total-kg').textContent = totalRecycled.toFixed(2) + ' kg';
+            document.getElementById('profile-balance').textContent = 'R$ ' + state.saldo.toFixed(2);
+            
+            // Update ranking
+            document.getElementById('user-ranking-kg').textContent = totalRecycled.toFixed(2) + ' kg';
+            document.getElementById('user-total-kg').textContent = totalRecycled.toFixed(2) + ' kg';
+            document.getElementById('user-balance').textContent = 'R$ ' + state.saldo.toFixed(2);
+            
+            // Enable/disable withdraw button
+            withdrawBtn.disabled = state.saldo < 10;
+        }
+
+        // Update price table
+        function updatePriceTable() {
+            const priceTable = document.getElementById('price-table');
+            priceTable.innerHTML = '';
+            
+            for (const [key, value] of Object.entries(state.precos)) {
+                const li = document.createElement('li');
+                li.className = 'flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg';
+                
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'material-icon';
+                iconSpan.innerHTML = `<i class="${getMaterialIcon(key)} text-green-600"></i>`;
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'flex-1';
+                nameSpan.textContent = getMaterialName(key);
+                
+                const priceSpan = document.createElement('span');
+                priceSpan.className = 'font-semibold';
+                priceSpan.textContent = 'R$ ' + value.toFixed(2) + ' /kg';
+                
+                li.appendChild(iconSpan);
+                li.appendChild(nameSpan);
+                li.appendChild(priceSpan);
+                priceTable.appendChild(li);
+            }
+        }
+
+        // Update history table
+        function updateHistoryTable() {
+            const historyTable = document.getElementById('history-table');
+            const emptyHistory = document.getElementById('empty-history');
+            
+            historyTable.innerHTML = '';
+            
+            if (state.historico.length === 0) {
+                emptyHistory.classList.remove('hidden');
+                return;
+            }
+            
+            emptyHistory.classList.add('hidden');
+            
+            state.historico.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b hover:bg-gray-50';
+                
+                const dateTd = document.createElement('td');
+                dateTd.className = 'py-2';
+                dateTd.textContent = item.date.toLocaleDateString();
+                
+                const materialTd = document.createElement('td');
+                materialTd.className = 'py-2 flex items-center';
+                materialTd.innerHTML = `<i class="${getMaterialIcon(item.material)} text-green-600 mr-2"></i> ${getMaterialName(item.material)}`;
+                
+                const quantityTd = document.createElement('td');
+                quantityTd.className = 'py-2';
+                quantityTd.textContent = item.quantity.toFixed(2) + ' kg';
+                
+                const valueTd = document.createElement('td');
+                valueTd.className = 'py-2 font-medium';
+                valueTd.textContent = 'R$ ' + item.value.toFixed(2);
+                
+                tr.appendChild(dateTd);
+                tr.appendChild(materialTd);
+                tr.appendChild(quantityTd);
+                tr.appendChild(valueTd);
+                historyTable.appendChild(tr);
+            });
+        }
+
+        // Update bins list
+        function updateBinsList() {
+            const binsList = document.getElementById('bins-list');
+            binsList.innerHTML = '';
+            
+            state.lixeiras.forEach(bin => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center p-3 border rounded-lg hover:bg-gray-50';
+                
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'mr-3';
+                iconDiv.innerHTML = `<i class="fas fa-trash-alt text-xl ${bin.status === 'cheia' ? 'text-red-500' : 'text-green-500'}"></i>`;
+                
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'flex-1';
+                
+                const nameP = document.createElement('p');
+                nameP.className = 'font-medium';
+                nameP.textContent = bin.local;
+                
+                const statusP = document.createElement('p');
+                statusP.className = 'text-sm text-gray-600';
+                statusP.textContent = `Status: ${bin.status === 'cheia' ? 'Cheia' : 'Disponível'}`;
+                
+                infoDiv.appendChild(nameP);
+                infoDiv.appendChild(statusP);
+                
+                const visitedSpan = document.createElement('span');
+                visitedSpan.className = 'text-xs px-2 py-1 rounded-full ' + (bin.visitada ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800');
+                visitedSpan.textContent = bin.visitada ? 'Visitada' : 'Nova';
+                
+                div.appendChild(iconDiv);
+                div.appendChild(infoDiv);
+                div.appendChild(visitedSpan);
+                binsList.appendChild(div);
+            });
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
