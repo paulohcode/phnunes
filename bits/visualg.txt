@@ -1,0 +1,48 @@
+algoritmo "Hello_World"
+var
+
+inicio
+   escreva("Hello World")
+fimalgoritmo
+
+algoritmo "Boas_Vindas"
+var
+   nome : caractere
+inicio
+   escreva("Digite seu nome: ")
+   leia(nome)
+   escreva("Seja bem-vindo, ", nome)
+fimalgoritmo
+
+algoritmo "Calculo_Idade"
+var
+   ano_nasc, idade : inteiro
+inicio
+   escreva("Ano de nascimento: ")
+   leia(ano_nasc)
+   idade <- 2026 - ano_nasc
+   escreva("Sua idade é: ", idade)
+fimalgoritmo
+
+algoritmo "Exercicio_Cracha"
+// Objetivo: Ler dados e exibir em uma única frase personalizada.
+var
+   nome : caractere
+   idade : inteiro
+   cidade : caractere
+inicio
+   // 1. Entrada de Dados
+   escreva("Digite seu nome: ")
+   leia(nome)
+   
+   escreva("Digite sua idade: ")
+   leia(idade)
+   
+   escreva("Digite sua cidade: ")
+   leia(cidade)
+   
+   // 2. Saída de Dados (Concatenação)
+   // Importante: Note o uso das vírgulas para separar os textos das variáveis.
+   escreval("")
+   escreval("Olá ", nome, ", você tem ", idade, " anos e mora em ", cidade, ".")
+fimalgoritmo
