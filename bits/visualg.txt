@@ -5,6 +5,8 @@ inicio
    escreva("Hello World")
 fimalgoritmo
 
+-----------------------------------------------------------------
+
 algoritmo "Boas_Vindas"
 var
    nome : caractere
@@ -13,6 +15,8 @@ inicio
    leia(nome)
    escreva("Seja bem-vindo, ", nome)
 fimalgoritmo
+
+-----------------------------------------------------------------
 
 algoritmo "Calculo_Idade"
 var
@@ -23,6 +27,8 @@ inicio
    idade <- 2026 - ano_nasc
    escreva("Sua idade é: ", idade)
 fimalgoritmo
+
+-----------------------------------------------------------------
 
 algoritmo "Exercicio_Cracha"
 // Objetivo: Ler dados e exibir em uma única frase personalizada.
@@ -45,4 +51,5 @@ inicio
    // Importante: Note o uso das vírgulas para separar os textos das variáveis.
    escreval("")
    escreval("Olá ", nome, ", você tem ", idade, " anos e mora em ", cidade, ".")
+
 fimalgoritmo
